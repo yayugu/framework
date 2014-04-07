@@ -279,6 +279,20 @@ class DatabaseMySqlSchemaGrammarTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(1, count($statements));
 		$this->assertEquals('alter table `users` add `foo` varchar(100) null default CURRENT TIMESTAMP', $statements[0]);
+
+		$blueprint = new Blueprint('users');
+		$blueprint->string('foo')->characterSet('ascii');
+		$statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
+
+		$this->assertEquals(1, count($statements));
+		$this->assertEquals('alter table `users` add `foo` varchar(255) not null character set ascii', $statements[0]);
+
+		$blueprint = new Blueprint('users');
+		$blueprint->string('foo')->collate('ascii_general_ci');
+		$statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
+
+		$this->assertEquals(1, count($statements));
+		$this->assertEquals('alter table `users` add `foo` varchar(255) not null collate ascii_general_ci', $statements[0]);
 	}
 
 

@@ -18,7 +18,7 @@ class MySqlGrammar extends Grammar {
 	 *
 	 * @var array
 	 */
-	protected $modifiers = array('Unsigned', 'Nullable', 'Default', 'Increment', 'After');
+	protected $modifiers = array('Unsigned', 'Nullable', 'Default', 'Increment', 'After', 'CharacterSet', 'Collate');
 
 	/**
 	 * The possible column serials
@@ -571,6 +571,36 @@ class MySqlGrammar extends Grammar {
 		if ( ! is_null($column->after))
 		{
 			return ' after '.$this->wrap($column->after);
+		}
+	}
+
+	/**
+	 * Get the SQL for a character set column modifier.
+	 *
+	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string|null
+	 */
+	protected function modifyCharacterSet(Blueprint $blueprint, Fluent $column)
+	{
+		if ( ! is_null($column->characterSet))
+		{
+			return ' character set '.$column->characterSet;
+		}
+	}
+
+	/**
+	 * Get the SQL for a collate column modifier.
+	 *
+	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string|null
+	 */
+	protected function modifyCollate(Blueprint $blueprint, Fluent $column)
+	{
+		if ( ! is_null($column->collate))
+		{
+			return ' collate '.$column->collate;
 		}
 	}
 
